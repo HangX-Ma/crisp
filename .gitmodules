@@ -1,0 +1,8 @@
+[submodule "library/spdlog"]
+	path = library/spdlog
+	url = https://github.com/gabime/spdlog.git
+	branch = v1.x
+
+[submodule "library/simplekv"]
+	path = library/simplekv
+	url = https://github.com/HangX-Ma/simplekv.git
