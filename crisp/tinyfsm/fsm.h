@@ -1,5 +1,5 @@
-#ifndef CORE_TINYFSM_FSM_H
-#define CORE_TINYFSM_FSM_H
+#ifndef CRISP_TINYFSM_FSM_H
+#define CRISP_TINYFSM_FSM_H
 
 #include <cassert>
 #include <cstdint>
@@ -103,4 +103,4 @@ private:
 
 } // namespace crisp
 
-#endif // CORE_TINYFSM_FSM_H
+#endif // CRISP_TINYFSM_FSM_H

@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 
 file(GLOB CRISP_APP_SRCS ${CMAKE_CURRENT_LIST_DIR}/app/*.cpp)
 file(GLOB CRISP_CORE_SRCS ${CMAKE_CURRENT_LIST_DIR}/core/*.cpp)
+file(GLOB CRISP_DEVICE_SRCS ${CMAKE_CURRENT_LIST_DIR}/device/*.cpp)
+file(GLOB_RECURSE CRISP_MODULE_SRCS ${CMAKE_CURRENT_LIST_DIR}/module/*.cpp)
 file(GLOB CRISP_TINYFSM_SRCS ${CMAKE_CURRENT_LIST_DIR}/tinyfsm/*.cpp)
 
 set(CRISP_ALL_SOURCES ${CRISP_APP_SRCS} ${CRISP_CORE_SRCS}
@@ -19,6 +21,9 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/app
     ${CMAKE_CURRENT_LIST_DIR}/core
+    ${CMAKE_CURRENT_LIST_DIR}/device
+    ${CMAKE_CURRENT_LIST_DIR}/module
+    ${CMAKE_CURRENT_LIST_DIR}/module/logo
     ${CMAKE_CURRENT_LIST_DIR}/tinyfsm)
 target_link_libraries(crisp simplekv spdlog)
 

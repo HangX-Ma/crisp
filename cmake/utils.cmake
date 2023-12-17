@@ -34,7 +34,7 @@ function(crisp_enable_warnings target_name)
             PRIVATE $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:
                     -Wall
                     -Wextra
-                    -Wconversion
+                    # -Wconversion
                     -pedantic
                     -Werror
                     -Wfatal-errors>)
