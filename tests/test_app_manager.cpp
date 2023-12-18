@@ -1,14 +1,20 @@
-#include "core/crisp.h"
-#include "core/database.h"
-#include <gtest/gtest.h>
-#include "manager.h"
+#include "app/manager.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
+#include <gtest/gtest.h>
 
 auto logger = spdlog::basic_logger_mt("test_logger", "logs/test_app_manager.txt", true);
 
 class AppT1 : public crisp::App
 {
+
+public:
+    ~AppT1() override
+    {
+        spdlog::info("{} > {}, release resource", getInnerData()->getAppName(), __func__);
+    }
+
+private:
     void onCreate(const crisp::AppData * /*unused*/) override
     {
         spdlog::info("{} > {}", getInnerData()->getAppName(), __func__);
@@ -29,15 +35,9 @@ class AppT1 : public crisp::App
     {
         spdlog::info("{} > {}", getInnerData()->getAppName(), __func__);
     }
-
-public:
-    ~AppT1() override
-    {
-        spdlog::info("{} > {}, release resource", getInnerData()->getAppName(), __func__);
-    }
 };
 
-class AppT1Packer : public crisp::AppData
+struct AppT1Packer : public crisp::AppData
 {
 public:
     AppT1Packer() : AppData("AppT1") {}
@@ -102,8 +102,6 @@ TEST(AppManagerTest, AppLifeCycleBasicTest)
     /* app_t1 has been destroyed */
     EXPECT_EQ(app_t1, nullptr); /* app_t1 has been destroyed */
     EXPECT_EQ(app_manager.size(), 0);
-
-    spdlog::info("{:=^4} AppLifeCycleBasicTest END {:=^4}", "", "");
 }
 
 TEST(AppManagerTest, BunchAppLifeCycleTest)
@@ -192,8 +190,6 @@ TEST(AppManagerTest, BunchAppLifeCycleTest)
     app_manager.printInfo();
     app_manager.destroyApp(&app_t1);
     EXPECT_EQ(app_manager.size(), 0);
-
-    spdlog::info("{:=^4} BunchAppLifeCycleBasicTest END {:=^4}", "", "");
 }
 
 int main(int argc, char **argv)

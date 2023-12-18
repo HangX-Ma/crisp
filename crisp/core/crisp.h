@@ -64,6 +64,10 @@ public:
     bool uninstallDevice(Device *device) { return device_register_.uninstall(device, true); }
     void clearDeviceRegister() { device_register_.clear(true); };
     std::size_t getInstalledDeviceNum() { return device_register_.size(); }
+    const std::unordered_set<Device *> &getInstalledDeviceList()
+    {
+        return device_register_.getInstalledDeviceList();
+    }
 
     /* app register */
     bool installApp(AppData *appdata)
@@ -73,6 +77,10 @@ public:
     bool uninstallApp(AppData *appdata) { return app_register_.uninstall(appdata, true); }
     void clearAppRegister() { app_register_.clear(true); }
     std::size_t getInstalledAppNum() { return app_register_.size(); }
+    const std::unordered_set<AppData *> &getInstalledAppList()
+    {
+        return app_register_.getInstalledAppList();
+    }
 
     /* App manager */
     App *createApp(AppData *appdata) { return app_manager_.createApp(appdata); }

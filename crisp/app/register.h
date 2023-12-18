@@ -19,6 +19,7 @@ public:
 
     bool isInstalled(AppData *appdata) { return appdata_set_.count(appdata) != 0; }
     std::size_t size() { return appdata_set_.size(); }
+    const std::unordered_set<AppData *> &getInstalledAppList() { return appdata_set_; }
 
 private:
     std::unordered_set<AppData *> appdata_set_;

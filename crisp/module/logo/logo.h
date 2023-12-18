@@ -15,10 +15,10 @@ public:
     static void showInfo()
     {
         /* Print logo */
-        spdlog::info("{}"
+        spdlog::info("\n{}"
                      "\n- @author HangX-Ma\n"
                      "- @version v{}.{}.{}\n"
-                     "- @build at {} {}\n\n",
+                     "- @build at {} {}\n",
                      getLogo(), CRISP_VER_MAJOR, CRISP_VER_MINOR, CRISP_VER_PATCH, __TIME__,
                      __DATE__);
     }

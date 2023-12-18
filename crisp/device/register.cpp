@@ -46,17 +46,12 @@ void DeviceRegister::clear(bool free_mem)
     device_set_.clear();
 }
 
-void DeviceRegister::init()
-{
-    for (auto item : device_set_) {
-        item->init();
-    }
-}
-
 void DeviceRegister::update()
 {
     for (auto item : device_set_) {
-        item->update();
+        if (item->getUpdatePermission()) {
+            item->update();
+        }
     }
 }
 

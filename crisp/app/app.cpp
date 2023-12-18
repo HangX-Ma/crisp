@@ -1,5 +1,5 @@
 #include "app/app.h"
-#include "fsm.h"
+#include "tinyfsm/fsm.h"
 
 namespace crisp
 {

@@ -1,7 +1,7 @@
 #include "core/crisp.h"
 #include "core/database.h"
 #include "spdlog/spdlog.h"
-#include "module/logo/logo.h"
+#include "logo/logo.h"
 
 namespace crisp
 {
@@ -39,7 +39,7 @@ void Crisp::init()
         app_manager_.update();
     }
     while (app_manager_.size() != 0U);
-    spdlog::info("crisp init done");
+    spdlog::info("crisp init done\n");
 }
 
 void Crisp::internalSetUpDatabase()

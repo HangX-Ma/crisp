@@ -19,12 +19,7 @@ add_library(crisp::crisp ALIAS crisp)
 target_include_directories(
     crisp PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
-    ${CMAKE_CURRENT_LIST_DIR}/app
-    ${CMAKE_CURRENT_LIST_DIR}/core
-    ${CMAKE_CURRENT_LIST_DIR}/device
-    ${CMAKE_CURRENT_LIST_DIR}/module
-    ${CMAKE_CURRENT_LIST_DIR}/module/logo
-    ${CMAKE_CURRENT_LIST_DIR}/tinyfsm)
+    ${CMAKE_CURRENT_LIST_DIR}/module)
 target_link_libraries(crisp simplekv spdlog)
 
 crisp_enable_warnings(crisp)

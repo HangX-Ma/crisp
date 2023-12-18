@@ -1,4 +1,4 @@
-#include "module/logo/logo.h"
+#include "logo/logo.h"
 
 using Logo = crisp::apps::Logo;
 const std::string Logo::LOGO = R"(
