@@ -68,22 +68,22 @@ void AppManager::update()
         auto app = iter->app;
         /* app require to start */
         if (app->checkGotoStartMsg()) {
-            app->changeCurrentState(App::APP_ON_RESUME);
+            app->start();
             goto update_label;
         }
         /* app require to close */
         if (app->checkGotoCloseMsg()) {
             if (app->checkRunningBackgroundPermission()) {
-                app->changeCurrentState(App::APP_ON_PAUSE);
+                app->close();
             }
             else {
-                app->changeCurrentState(App::APP_ON_DESTROY);
+                app->destroy();
             }
             goto update_label;
         }
         /* app require to destroy */
         if (app->checkGotoDestroyMsg()) {
-            app->changeCurrentState(App::APP_ON_DESTROY);
+            app->destroy();
         }
     update_label:
         app->update();

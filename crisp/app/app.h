@@ -39,7 +39,7 @@ public:
 
     void create(const AppData *data = nullptr);
     void start(const AppData *data = nullptr);
-    void close(const AppData *data = nullptr);
+    void close();
     void destroy();
     void update();
 
@@ -63,8 +63,6 @@ public:
     bool checkGotoStartMsg() { return checkGotoMsg(0); }
     bool checkGotoCloseMsg() { return checkGotoMsg(1); }
     bool checkGotoDestroyMsg() { return checkGotoMsg(2); }
-
-    void changeCurrentState(StateType new_state) { setCurrentState(new_state); }
 
     enum States : StateType
     {

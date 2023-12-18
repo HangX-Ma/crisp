@@ -60,7 +60,7 @@ public:
     enum : uint8_t
     {
         EVENT_IGNORED = 0xFE,
-        EVENT_CANNOT_HAPPEN
+        CANNOT_HAPPEN
     };
 
     explicit TinyFSM(StateType max_states_num, StateType initial_state = 0);
@@ -80,10 +80,9 @@ protected:
      */
     void internalEvent(StateType new_state, const EventData *pData = nullptr);
 
-    /** Used in state change message */
+private:
     void setCurrentState(StateType new_state) { current_state_ = new_state; }
 
-private:
     /**
      * @brief Gets the state action table as defined in the derived class.
      * @return An array of `FSMActionTable` pointers with the array size max_states_num

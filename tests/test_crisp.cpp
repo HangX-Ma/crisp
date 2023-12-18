@@ -29,8 +29,8 @@ TEST(CrispTest, BasicTest)
 
 int main(int argc, char **argv)
 {
-    // set default logger to log-file version
-    spdlog::set_default_logger(logger);
+    // TODO(user,test_crisp): Comment following line if you want string output
+    spdlog::set_default_logger(logger); // set default logger to log-file version
 
     ::testing::InitGoogleTest(&argc, argv);
 

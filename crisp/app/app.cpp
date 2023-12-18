@@ -20,7 +20,7 @@ void App::start(const AppData *data)
     assert((sizeof(transitions) / sizeof(StateType)) == APP_MAX_STATES);
 }
 
-void App::close(const AppData *data)
+void App::close()
 {
     static const StateType transitions[] = {
         EVENT_IGNORED, // ON_CREATE
@@ -30,17 +30,23 @@ void App::close(const AppData *data)
         EVENT_IGNORED, // ON_PAUSE
         EVENT_IGNORED, // ON_DESTROY
     };
-    externalEvent(transitions[getCurrentState()], data);
+    externalEvent(transitions[getCurrentState()]);
     assert((sizeof(transitions) / sizeof(StateType)) == APP_MAX_STATES);
 }
 
 void App::destroy()
 {
-    externalEvent(APP_ON_PAUSE);
-    externalEvent(APP_ON_DESTROY);
-    if (inner_data_ != nullptr) {
-        inner_data_->deleteApp(this);
-    }
+    close();
+    static const StateType transitions[] = {
+        APP_ON_DESTROY, // ON_CREATE
+        CANNOT_HAPPEN,  // ON_RESUME
+        CANNOT_HAPPEN,  // ON_RUNNING
+        APP_ON_DESTROY, // ON_RUNNING_BACKGROUND
+        APP_ON_DESTROY, // ON_PAUSE
+        EVENT_IGNORED,  // ON_DESTROY
+    };
+    externalEvent(transitions[getCurrentState()]);
+    assert((sizeof(transitions) / sizeof(StateType)) == APP_MAX_STATES);
 }
 
 void App::update()
