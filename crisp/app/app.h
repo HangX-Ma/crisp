@@ -3,6 +3,7 @@
 
 #include "tinyfsm/fsm.h"
 #include <string>
+#include <utility>
 
 namespace crisp
 {
@@ -11,20 +12,23 @@ namespace crisp
  * Contains the essential elements of an app.
  * You can override those virtual method to set them.
  */
-class AppData : public EventData
+struct AppData : public EventData
 {
-public:
+    explicit AppData(std::string name) : name_(std::move(name)) {}
+
     void setUserData(void *user_data) { user_data_ = user_data; }
     void *getUserData() { return user_data_; }
     AppData *getAddr() { return this; }
 
-    virtual std::string getAppName() { return {}; };
+    std::string getAppName() { return name_; };
+    void setAppName(std::string name) { name_ = std::move(name); }
     virtual void *getAppIcon() { return nullptr; }
     virtual void *createApp() { return nullptr; }
     virtual void deleteApp(void *app) { (void) app; }
 
 private:
     void *user_data_{nullptr};
+    std::string name_;
 };
 
 /**
@@ -36,6 +40,8 @@ public:
     App() : TinyFSM(APP_MAX_STATES) {}
     AppData *getInnerData() { return inner_data_; }
     void setInnerData(AppData *data) { inner_data_ = data; }
+
+    StateType getCurrentState() { return TinyFSM::getCurrentState(); }
 
     /* APIs to send state message */
     void setRunningBackgroundPermission(bool permission) { setPermissionBit(permission, 4); }

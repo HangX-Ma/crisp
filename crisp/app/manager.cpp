@@ -5,6 +5,33 @@
 namespace crisp
 {
 
+int AppManager::generateAppId()
+{
+    int ret;
+    if (!recycled_ids_.empty()) {
+        ret = recycled_ids_.front();
+        recycled_ids_.pop();
+    }
+    else {
+        ret = next_id_;
+        next_id_ += 1;
+    }
+    return ret;
+}
+
+void AppManager::printInfo()
+{
+    if (app_list_.empty()) {
+        spdlog::info("No managed app ...");
+        return;
+    }
+
+    spdlog::info("Show managed App info");
+    for (const auto &packer : app_list_) {
+        spdlog::info("-> name_id: {}_{}", packer.app->getInnerData()->getAppName(), packer.id);
+    }
+}
+
 App *AppManager::createApp(AppData *appdata)
 {
     if (appdata == nullptr) {
@@ -17,7 +44,7 @@ App *AppManager::createApp(AppData *appdata)
     new_app->setInnerData(appdata);
     new_app->create();
 
-    app_list_.emplace_back(AppPacker{new_app});
+    app_list_.emplace_back(AppPacker{new_app, generateAppId()});
 
     return new_app;
 }
@@ -48,17 +75,20 @@ bool AppManager::closeApp(App *app)
     return true;
 }
 
-bool AppManager::destroyApp(App *app)
+bool AppManager::destroyApp(App **app)
 {
     if (app_list_.empty()) {
         return false;
     }
-    int idx = getAppIndexFromList(app);
+    int idx = getAppIndexFromList(*app);
     if (idx < 0) {
         return false;
     }
+    recycled_ids_.push(app_list_[idx].id); // recycle app id
     app_list_[idx].app->destroy();
     app_list_.erase(app_list_.begin() + idx);
+    (*app)->getInnerData()->deleteApp(*app);
+    *app = nullptr;
     return true;
 }
 
@@ -89,6 +119,7 @@ void AppManager::update()
         app->update();
         /* we need to remove the app from list if it has been destroyed */
         if (app->getCurrentState() == App::APP_ON_DESTROY) {
+            recycled_ids_.push(iter->id); // recycle app id
             app->getInnerData()->deleteApp(app);
             iter = app_list_.erase(iter);
             continue;
@@ -102,6 +133,10 @@ void AppManager::clear()
     for (auto app_packer : app_list_) {
         app_packer.app->destroy();
     }
+    while (!recycled_ids_.empty()) {
+        recycled_ids_.pop();
+    }
+    next_id_ = 0;
     app_list_.clear();
 }
 

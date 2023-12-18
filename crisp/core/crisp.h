@@ -78,9 +78,9 @@ public:
     App *createApp(AppData *appdata) { return app_manager_.createApp(appdata); }
     bool startApp(App *app) { return app_manager_.startApp(app); }
     bool closeApp(App *app) { return app_manager_.closeApp(app); }
-    bool destroyApp(App *app) { return app_manager_.destroyApp(app); }
+    bool destroyApp(App **app) { return app_manager_.destroyApp(app); }
     void clearAppManager() { app_manager_.clear(); };
-    std::size_t getMgrAppNum() { return app_manager_.getMgrAppNum(); }
+    std::size_t getManagedAppNum() { return app_manager_.size(); }
 
 private:
     void internalSetUpDatabase();

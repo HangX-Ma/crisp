@@ -7,9 +7,8 @@
 namespace crisp
 {
 
-class EventData
+struct EventData
 {
-public:
     virtual ~EventData() = default;
 };
 using NoEventData = EventData;

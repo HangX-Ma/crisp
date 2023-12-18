@@ -38,7 +38,7 @@ void Crisp::init()
     do {
         app_manager_.update();
     }
-    while (app_manager_.getMgrAppNum() != 0);
+    while (app_manager_.size() != 0U);
     spdlog::info("crisp init done");
 }
 

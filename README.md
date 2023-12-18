@@ -11,7 +11,7 @@ title: App Manager
 stateDiagram-v2
     direction LR
     [*] --> onCreate
-    onCreate --> onResume
+    onCreate --> onResume: startApp
     onCreate --> onDestroy
 
     onResume --> onRunning

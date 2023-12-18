@@ -36,11 +36,16 @@ private:
     static const std::string LOGO;
 };
 
-class LogoData : public AppData
+struct LogoData : public AppData
 {
-    std::string getAppName() override { return "BootLogo"; }
+    LogoData() : AppData("BootLogo") {}
     void *createApp() override { return new Logo; }
-    void deleteApp(void *app) override { delete static_cast<Logo *>(app); }
+    void deleteApp(void *app) override
+    {
+        auto real_app = static_cast<Logo *>(app);
+        delete real_app;
+        real_app = nullptr;
+    }
 };
 
 } // namespace crisp::apps
