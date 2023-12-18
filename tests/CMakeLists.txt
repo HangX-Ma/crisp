@@ -43,7 +43,5 @@ if(CRISP_BUILD_TESTS)
                 GTest::Main
         )
         gtest_discover_tests(${test_target})
-        add_test(NAME ${test_target} COMMAND ${test_target})
     endforeach()
-    set_tests_properties(${test_target} PROPERTIES RUN_SERIAL ON)
 endif()

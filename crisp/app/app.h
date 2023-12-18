@@ -37,46 +37,19 @@ public:
     AppData *getInnerData() { return inner_data_; }
     void setInnerData(AppData *data) { inner_data_ = data; }
 
-    void create(const AppData *data = nullptr);
-    void start(const AppData *data = nullptr);
-    void close();
-    void destroy();
-    void update();
-
     /* APIs to send state message */
-    void setRunningBackgroundPermission(bool permission)
-    {
-        special_bits_ &= ~(1 << 4); // clear previous setting
-        special_bits_ |= static_cast<uint8_t>(permission) << 4;
-    }
-    bool checkRunningBackgroundPermission() { return ((special_bits_ >> 4) & 0x1) != 0; }
-    void sendGotoMsg(uint8_t bit) { special_bits_ |= (1 << bit); }
+    void setRunningBackgroundPermission(bool permission) { setPermissionBit(permission, 4); }
+    bool checkRunningBackgroundPermission() { return checkPermissionBit(4); }
+
     void sendGotoStartMsg() { sendGotoMsg(0); }
     void sendGotoCloseMsg() { sendGotoMsg(1); }
     void sendGotoDestroyMsg() { sendGotoMsg(2); }
-    bool checkGotoMsg(uint8_t bit)
-    {
-        bool ret = ((special_bits_ >> bit) & 0x1) != 0; // read bit
-        special_bits_ &= ~(1 << bit);                   // clear bit
-        return ret;
-    }
     bool checkGotoStartMsg() { return checkGotoMsg(0); }
     bool checkGotoCloseMsg() { return checkGotoMsg(1); }
     bool checkGotoDestroyMsg() { return checkGotoMsg(2); }
 
-    enum States : StateType
-    {
-        APP_ON_CREATE,
-        APP_ON_RESUME,
-        APP_ON_RUNNING,
-        APP_ON_RUNNING_BACKGROUND,
-        APP_ON_PAUSE,
-        APP_ON_DESTROY,
-        APP_MAX_STATES,
-    };
-
 protected:
-    /* Lifecycle methods */
+    /* Lifecycle methods, only inherit class can use them */
     /* ref: <https://developer.android.com/guide/components/activities/activity-lifecycle> */
     virtual void onCreate(const AppData *) = 0;
     virtual void onResume(const AppData * /*unused*/) {}
@@ -93,6 +66,43 @@ protected:
     FSMAction<App, AppData, &App::onDestroy> app_destroy;
 
 private:
+    // only `AppManager` has the right to use the following code
+    // I don't want user's app than inherit the `App` base class
+    // has the right to influence the core FSM mechanism.
+    enum States : StateType
+    {
+        APP_ON_CREATE,
+        APP_ON_RESUME,
+        APP_ON_RUNNING,
+        APP_ON_RUNNING_BACKGROUND,
+        APP_ON_PAUSE,
+        APP_ON_DESTROY,
+        APP_MAX_STATES,
+    };
+    void create(const AppData *data = nullptr);
+    void start(const AppData *data = nullptr);
+    void close();
+    void destroy();
+    void update();
+    friend class AppManager;
+
+    /* special bit process */
+    void setPermissionBit(bool permission, uint8_t bit)
+    {
+        special_bits_ &= ~(1 << bit); // clear previous setting
+        special_bits_ |= static_cast<uint8_t>(permission) << bit;
+    }
+    bool checkPermissionBit(uint8_t bit) { return ((special_bits_ >> bit) & 0x1) != 0; }
+
+    void sendGotoMsg(uint8_t bit) { special_bits_ |= (1 << bit); }
+    bool checkGotoMsg(uint8_t bit)
+    {
+        bool ret = ((special_bits_ >> bit) & 0x1) != 0; // read bit
+        special_bits_ &= ~(1 << bit);                   // clear bit
+        return ret;
+    }
+
+    /* FSM action table */
     const FSMActionTable *getActionTable() override
     {
         // clang-format off
