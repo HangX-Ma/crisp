@@ -15,7 +15,7 @@ message(STATUS "Build crisp: ${CRISP_VERSION}")
 # Set default build to release
 # ---------------------------------------------------------------------------------------
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-        set(CMAKE_BUILD_TYPE "release" CACHE STRING "Choose Release or Debug" FORCE)
+        set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
 endif()
 
 # ---------------------------------------------------------------------------------------

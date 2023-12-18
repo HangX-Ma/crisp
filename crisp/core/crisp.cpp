@@ -20,6 +20,8 @@ void Crisp::init()
     crisp_inner_.user_data->crisp = this;
     crisp_inner_.user_data->database = &database_;
 
+    internalSetUpDatabase();
+
     /* Init boot anim */
     /* If boot anim not set */
     if (crisp_inner_.boot_logo == nullptr) {
@@ -30,7 +32,8 @@ void Crisp::init()
 
     spdlog::info("booting ...");
     app_manager_.clear();
-    app_manager_.startApp(app_manager_.createApp(crisp_inner_.boot_logo));
+    auto *new_app = app_manager_.createApp(crisp_inner_.boot_logo);
+    app_manager_.startApp(new_app);
 
     do {
         app_manager_.update();

@@ -15,7 +15,7 @@ bool DeviceRegister::install(Device *device, void *user_data)
     }
     device->setUserData(user_data);
     device->init();
-    objects.emplace(device);
+    device_set_.emplace(device);
 
     return true;
 }
@@ -29,7 +29,7 @@ bool DeviceRegister::uninstall(Device *device, bool free_mem)
         return false;
     }
 
-    objects.erase(device);
+    device_set_.erase(device);
     if (free_mem) {
         delete device;
     }
@@ -39,23 +39,23 @@ bool DeviceRegister::uninstall(Device *device, bool free_mem)
 void DeviceRegister::clear(bool free_mem)
 {
     if (free_mem) {
-        for (auto item : objects) {
+        for (auto item : device_set_) {
             delete item;
         }
     }
-    objects.clear();
+    device_set_.clear();
 }
 
 void DeviceRegister::init()
 {
-    for (auto item : objects) {
+    for (auto item : device_set_) {
         item->init();
     }
 }
 
 void DeviceRegister::update()
 {
-    for (auto item : objects) {
+    for (auto item : device_set_) {
         item->update();
     }
 }

@@ -66,16 +66,16 @@ public:
     std::size_t getInstalledDeviceNum() { return device_register_.size(); }
 
     /* app register */
-    bool installApp(AppData *app_data)
+    bool installApp(AppData *appdata)
     {
-        return app_register_.install(app_data, crisp_inner_.user_data);
+        return app_register_.install(appdata, crisp_inner_.user_data);
     }
-    bool uninstallApp(AppData *app_data) { return app_register_.uninstall(app_data, true); }
+    bool uninstallApp(AppData *appdata) { return app_register_.uninstall(appdata, true); }
     void clearAppRegister() { app_register_.clear(true); }
     std::size_t getInstalledAppNum() { return app_register_.size(); }
 
     /* App manager */
-    App *createApp(AppData *app_data) { return app_manager_.createApp(app_data); }
+    App *createApp(AppData *appdata) { return app_manager_.createApp(appdata); }
     bool startApp(App *app) { return app_manager_.startApp(app); }
     bool closeApp(App *app) { return app_manager_.closeApp(app); }
     bool destroyApp(App *app) { return app_manager_.destroyApp(app); }

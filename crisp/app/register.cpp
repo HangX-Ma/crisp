@@ -5,31 +5,31 @@ namespace crisp
 
 AppRegister::~AppRegister() { clear(true); }
 
-bool AppRegister::install(AppData *app_data, void *user_data)
+bool AppRegister::install(AppData *appdata, void *user_data)
 {
-    if (app_data == nullptr) {
+    if (appdata == nullptr) {
         return false;
     }
-    if (isInstalled(app_data)) {
+    if (isInstalled(appdata)) {
         return false;
     }
-    app_data->setUserData(user_data);
-    objects.emplace(app_data);
+    appdata->setUserData(user_data);
+    appdata_set_.emplace(appdata);
     return true;
 }
 
-bool AppRegister::uninstall(AppData *app_data, bool free_mem)
+bool AppRegister::uninstall(AppData *appdata, bool free_mem)
 {
-    if (app_data == nullptr) {
+    if (appdata == nullptr) {
         return false;
     }
-    if (!isInstalled(app_data)) {
+    if (!isInstalled(appdata)) {
         return false;
     }
 
-    objects.erase(app_data);
+    appdata_set_.erase(appdata);
     if (free_mem) {
-        delete app_data;
+        delete appdata;
     }
     return true;
 }
@@ -37,11 +37,11 @@ bool AppRegister::uninstall(AppData *app_data, bool free_mem)
 void AppRegister::clear(bool free_mem)
 {
     if (free_mem) {
-        for (auto item : objects) {
+        for (auto item : appdata_set_) {
             delete item;
         }
     }
-    objects.clear();
+    appdata_set_.clear();
 }
 
 } // namespace crisp

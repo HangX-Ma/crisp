@@ -43,7 +43,29 @@ public:
     void destroy();
     void update();
 
-protected:
+    /* APIs to send state message */
+    void setRunningBackgroundPermission(bool permission)
+    {
+        special_bits_ &= ~(1 << 4); // clear previous setting
+        special_bits_ |= static_cast<uint8_t>(permission) << 4;
+    }
+    bool checkRunningBackgroundPermission() { return ((special_bits_ >> 4) & 0x1) != 0; }
+    void sendGotoMsg(uint8_t bit) { special_bits_ |= (1 << bit); }
+    void sendGotoStartMsg() { sendGotoMsg(0); }
+    void sendGotoCloseMsg() { sendGotoMsg(1); }
+    void sendGotoDestroyMsg() { sendGotoMsg(2); }
+    bool checkGotoMsg(uint8_t bit)
+    {
+        bool ret = ((special_bits_ >> bit) & 0x1) != 0; // read bit
+        special_bits_ &= ~(1 << bit);                   // clear bit
+        return ret;
+    }
+    bool checkGotoStartMsg() { return checkGotoMsg(0); }
+    bool checkGotoCloseMsg() { return checkGotoMsg(1); }
+    bool checkGotoDestroyMsg() { return checkGotoMsg(2); }
+
+    void changeCurrentState(StateType new_state) { setCurrentState(new_state); }
+
     enum States : StateType
     {
         APP_ON_CREATE,
@@ -55,6 +77,7 @@ protected:
         APP_MAX_STATES,
     };
 
+protected:
     /* Lifecycle methods */
     /* ref: <https://developer.android.com/guide/components/activities/activity-lifecycle> */
     virtual void onCreate(const AppData *) = 0;
@@ -83,12 +106,18 @@ private:
             {&app_pause},
             {&app_destroy},
         };
-        return state_action_table;
+        return &state_action_table[0];
         // clang-format on
     }
 
 private:
     AppData *inner_data_; // You can get inner resource of this app
+    // special bits:
+    // - 0 bit: goto start
+    // - 1 bit: goto close
+    // - 2 bit: goto destroy
+    // - 4 bit: background running permission
+    uint8_t special_bits_{0};
 };
 
 } // namespace crisp

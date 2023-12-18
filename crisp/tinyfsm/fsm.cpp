@@ -55,9 +55,9 @@ void TinyFSM::stateEngine(const FSMActionTable *pActionTable)
 
         // Get the pointer from the action table
         const FSMActionBase *action = pActionTable[new_state_].action;
-        data_ptr = pEvent_data_;    // Copy of event data pointer
-        pEvent_data_ = nullptr;     // Event data used up, reset the pointer
-        is_event_generated_ = true; // Event used up, reset the flag
+        data_ptr = pEvent_data_;     // Copy of event data pointer
+        pEvent_data_ = nullptr;      // Event data used up, reset the pointer
+        is_event_generated_ = false; // Event used up, reset the flag
 
         // Switch to the new current state
         setCurrentState(new_state_);

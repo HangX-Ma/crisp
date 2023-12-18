@@ -10,7 +10,7 @@ namespace crisp
 class AppManager
 {
 public:
-    App *createApp(AppData *app_data);
+    App *createApp(AppData *appdata);
     bool startApp(App *app);
     bool closeApp(App *app);
     bool destroyApp(App *app);
@@ -18,12 +18,16 @@ public:
     void update();
 
     size_t getMgrAppNum() { return app_list_.size(); }
+    struct AppPacker
+    {
+        App *app{nullptr};
+    };
 
 private:
     int getAppIndexFromList(App *app);
 
 private:
-    std::vector<App *> app_list_;
+    std::vector<AppPacker> app_list_;
 };
 
 } // namespace crisp

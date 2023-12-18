@@ -3,6 +3,7 @@
 
 #include "app/app.h"
 #include "core/version.h"
+#include "spdlog/spdlog.h"
 #include <iostream>
 
 namespace crisp::apps
@@ -14,19 +15,19 @@ public:
     static void showInfo()
     {
         /* Print logo */
-        std::cout << getLogo();
-        std::cout << "\n- @author HangX-Ma\n";
-        std::cout << "- @version "
-                  << "v" << CRISP_VER_MAJOR << "." << CRISP_VER_MINOR << "." << CRISP_VER_PATCH
-                  << "\n";
-        std::cout << "- @build at " << __TIME__ << " " << __DATE__ << "\n\n";
+        spdlog::info("{}"
+                     "\n- @author HangX-Ma\n"
+                     "- @version v{}.{}.{}\n"
+                     "- @build at {} {}\n\n",
+                     getLogo(), CRISP_VER_MAJOR, CRISP_VER_MINOR, CRISP_VER_PATCH, __TIME__,
+                     __DATE__);
     }
 
     void onCreate(const AppData * /*unused*/) override
     {
         /* Print Info */
         showInfo();
-        internalEvent(APP_ON_DESTROY);
+        sendGotoDestroyMsg();
     }
 
 private:

@@ -36,11 +36,13 @@ public:
         // Downcast the state machine and event data to the correct derived type
         auto derived_fsm = static_cast<FSM *>(fsm);
 
+        if (data == nullptr) {
+            (derived_fsm->*Func)(nullptr);
+            return;
+        }
         // dynamic_cast is used to check whether the type between
         // `Data` and `EventData` are the same or not
         const Data *derived_data = dynamic_cast<const Data *>(data);
-        assert(derived_data != nullptr);
-
         (derived_fsm->*Func)(derived_data);
     }
 };
@@ -78,8 +80,10 @@ protected:
      */
     void internalEvent(StateType new_state, const EventData *pData = nullptr);
 
-private:
+    /** Used in state change message */
     void setCurrentState(StateType new_state) { current_state_ = new_state; }
+
+private:
     /**
      * @brief Gets the state action table as defined in the derived class.
      * @return An array of `FSMActionTable` pointers with the array size max_states_num

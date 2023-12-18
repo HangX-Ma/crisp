@@ -51,7 +51,7 @@ void App::update()
         APP_ON_RUNNING,            // ON_RUNNING
         APP_ON_RUNNING_BACKGROUND, // ON_RUNNING_BACKGROUND
         APP_ON_RUNNING_BACKGROUND, // ON_PAUSE
-        EVENT_IGNORED,             // ON_DESTROY
+        APP_ON_DESTROY,            // ON_DESTROY
     };
     externalEvent(transitions[getCurrentState()]);
     assert((sizeof(transitions) / sizeof(StateType)) == APP_MAX_STATES);
